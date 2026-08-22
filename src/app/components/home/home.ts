@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { Auth } from '../../services/auth';
 @Component({
   imports: [],
   selector: 'app-home',
@@ -7,6 +8,12 @@ import { Router } from '@angular/router';
   templateUrl: './home.html',
 })
 export class Home {
-private router = inject(Router);
-
+  auth = inject(Auth);
+  name = JSON.parse(sessionStorage.getItem('user') || '{}').name;
+  imageProfile = JSON.parse(sessionStorage.getItem('user') || '{}').picture;
+  email = JSON.parse(sessionStorage.getItem('user') || '{}').email;
+  signOut() {
+    sessionStorage.removeItem('user');
+    this.auth.signOut();
+  }
 }
