@@ -1,36 +1,80 @@
-<div class="flex items-center h-screen w-full justify-center">
 
-<div class="max-w-xs">
-    <div class="bg-white shadow-xl rounded-lg py-3">
-        <div class="photo-wrapper p-2">
-            <img class="w-32 h-32 rounded-full mx-auto" src="{{ imageProfile }}" alt="John Doe">
-        </div>
-        <div class="p-2">
-            <h3 class="text-center text-xl text-gray-900 font-medium leading-8">{{ name }}</h3>
-            <div class="text-center text-gray-400 text-xs font-semibold">
-                <p>Web Developer</p>
+<app-nav-bar/>
+
+<div class="min-h-screen bg-slate-950 text-slate-100 p-6 md:p-10">
+  <div class="max-w-7xl mx-auto">
+    
+    <!-- Cabeçalho -->
+    <header class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-800 pb-6">
+      <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3">
+          <span class="text-rose-500">🎬</span> Filmes
+        </h1>
+        <p class="text-slate-400 mt-1 text-sm md:text-base">Catálogo TMDB de lançamentos e populares</p>
+      </div>
+
+      <!-- Tag Informativa -->
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+          Total: {{ movies().length }} títulos
+        </span>
+      </div>
+    </header>
+
+    <!-- Grid de Filmes -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+      @for (movie of movies(); track movie.id) {
+        <article class="group relative flex flex-col bg-slate-900 rounded-xl overflow-hidden border border-slate-800/80 shadow-md hover:shadow-2xl hover:shadow-rose-950/20 hover:border-slate-700 transition-all duration-300 transform hover:-translate-y-1.5">
+          
+          <!-- Pôster com Efeito de Hover e Badge -->
+          <div (click)="MovieDetails(movie.id)" class="relative aspect-[2/3] w-full overflow-hidden bg-slate-800">
+            <img 
+              [src]="imageBaseUrl + movie.poster_path" 
+              [alt]="movie.title"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+            
+            <!-- Badge de Nota -->
+            <div class="absolute top-2 right-2 flex items-center gap-1 bg-slate-950/80 backdrop-blur-md px-2 py-0.5 rounded-md border border-slate-700/50">
+              <span class="text-amber-400 text-xs">★</span>
+              <span class="text-xs font-bold text-amber-300">
+                {{ movie.vote_average | number:'1.1-1' }}
+              </span>
             </div>
-            <table class="text-xs my-3">
-                <tbody><tr>
-                    <td class="px-2 py-2 text-gray-500 font-semibold">Address</td>
-                    <td class="px-2 py-2">Chatakpur-3, Dhangadhi Kailali</td>
-                </tr>
-                <tr>
-                    <td class="px-2 py-2 text-gray-500 font-semibold">Phone</td>
-                    <td class="px-2 py-2">+977 9955221114</td>
-                </tr>
-                <tr>
-                    <td class="px-2 py-2 text-gray-500 font-semibold">Email</td>
-                    <td class="px-2 py-2">{{ email }}</td>
-                </tr>
-            </tbody></table>
 
-            <div class="text-center my-3">
-                <a (click)="signOut()" class="text-xs text-indigo-500 italic hover:underline hover:text-indigo-600 font-medium" href="#">Sair</a>
+            <!-- Gradiente Sutil sobre a Imagem -->
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60"></div>
+          </div>
+
+          <!-- Informações do Card -->
+          <div class="p-3.5 flex flex-col flex-grow justify-between gap-2">
+            <div>
+              <h2 
+                class="font-semibold text-slate-100 text-sm md:text-base leading-snug line-clamp-1 group-hover:text-rose-400 transition-colors"
+                [title]="movie.title"
+              >
+                {{ movie.title }}
+              </h2>
+              
+              <p class="text-xs font-medium text-slate-400 mt-0.5">
+                {{ movie.release_date | date:'yyyy' }}
+              </p>
             </div>
 
+            <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+              {{ movie.overview || 'Sinopse não disponível.' }}
+            </p>
+          </div>
+
+        </article>
+      } @empty {
+        <!-- Estado Vazio / Carregando -->
+        <div class="col-span-full py-20 text-center text-slate-500">
+          <p class="text-lg">Nenhum filme disponível no momento.</p>
         </div>
+      }
     </div>
-</div>
 
+  </div>
 </div>

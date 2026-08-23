@@ -1,0 +1,29 @@
+<!-- Modal do Player de Vídeo -->
+@if (trailerUrl()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md">
+    
+    <div class="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+      <!-- Botão Fechar -->
+      <button 
+        type="button" 
+        (click)="closePlayer()"
+        class="absolute top-3 right-3 z-10 p-2 text-slate-400 hover:text-white bg-slate-800/80 rounded-full"
+      >
+        ✕
+      </button>
+
+      <!-- Player Responsivo 16:9 -->
+      <div class="relative aspect-video w-full">
+        <iframe 
+          [src]="trailerUrl()" 
+          title="Trailer do Filme"
+          class="w-full h-full"
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+
+  </div>
+}
