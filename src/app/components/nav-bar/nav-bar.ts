@@ -12,6 +12,8 @@ export class NavBar {
   name = JSON.parse(sessionStorage.getItem('user') || '{}').name;
   imageProfile = JSON.parse(sessionStorage.getItem('user') || '{}').picture;
   email = JSON.parse(sessionStorage.getItem('user') || '{}').email;
+
+  
   signOut() {
     sessionStorage.removeItem('user');
     this.auth.signOut();

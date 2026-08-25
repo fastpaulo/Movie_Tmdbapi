@@ -1,5 +1,5 @@
 declare var google: any;
-import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 @Component({
@@ -9,6 +9,7 @@ import { environment } from '../../../environments/environment';
   templateUrl: './login.html',
 })
 export class Login implements AfterViewInit {
+  @ViewChild('google-signin-button', { static: false }) googleBtn!: ElementRef;
   private router = inject(Router);
   ngOnInit(): void {
   }
