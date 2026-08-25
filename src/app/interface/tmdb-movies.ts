@@ -59,4 +59,5 @@ export interface FavoriteMovie {
   vote_average: number;
   addedAt: Date;
   userId: string;
+  overview: string;
 }

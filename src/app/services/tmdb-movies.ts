@@ -79,6 +79,8 @@ export class TmdbMovies {
             .set('language', language);
         return this.http.get<VideoResponse>(url, { headers: this.headers, params });
     }
-
+getMyMovies(userId: string): Observable<FirebaseMovie[]> {
+    const moviesCollection = collection(this.firestore, 'user', userId, 'movies');
+    return collectionData(moviesCollection, { idField: 'tmdbId' }) as Observable<FirebaseMovie[]>;  
+}       
 }
-

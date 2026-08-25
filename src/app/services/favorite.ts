@@ -5,7 +5,9 @@ import {
   setDoc, 
   deleteDoc, 
   collection, 
-  collectionData 
+  collectionData, 
+  query,
+  onSnapshot
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { FavoriteMovie } from '../interface/tmdb-movies';
@@ -23,7 +25,9 @@ async addFavorite(userId: string, movie: any): Promise<void> {
       poster_path: movie.poster_path,
       vote_average: movie.vote_average,
       addedAt: new Date(),
-      userId: userId
+      userId: userId,
+      overview: movie.overview
+
     };
 
     return await setDoc(favoriteDocRef, movieData);
@@ -37,7 +41,25 @@ async addFavorite(userId: string, movie: any): Promise<void> {
 
 
   getFavorites(userId: string): Observable<FavoriteMovie[]> {
-    const favoritesCollection = collection(this.firestore, `users/${userId}/favorites`);
-    return collectionData(favoritesCollection, { idField: 'docId' }) as Observable<FavoriteMovie[]>;
+    const favoritesCollection = collection(this.firestore, `user/${userId}/favorites`);
+  const q = query(favoritesCollection);
+
+  return new Observable<FavoriteMovie[]>((observer) => {
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        })) as unknown as FavoriteMovie[];
+        
+        observer.next(data);
+      },
+      (error) => observer.error(error)
+    );
+
+    // Cancela o listener automaticamente quando a inscrição for destruída
+    return () => unsubscribe();
+  });
   }
 }

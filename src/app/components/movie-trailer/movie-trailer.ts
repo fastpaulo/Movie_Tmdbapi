@@ -48,4 +48,5 @@ export class MovieTrailer {
   closePlayer(): void {
     this.bsModalRef.hide();
   }
+ 
 }
