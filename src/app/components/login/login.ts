@@ -1,5 +1,5 @@
 declare var google: any;
-import { Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 @Component({
@@ -8,10 +8,10 @@ import { environment } from '../../../environments/environment';
   styleUrl: './login.css',
   templateUrl: './login.html',
 })
-export class Login implements OnInit {
+export class Login implements AfterViewInit {
   private router = inject(Router);
   ngOnInit(): void {
-    
+
   }
   ngAfterViewInit(): void {
     this.buttonLogin();
@@ -32,8 +32,8 @@ export class Login implements OnInit {
     }
   }
 
-  buttonLogin() { 
-google.accounts.id.initialize({
+  buttonLogin() {
+    google.accounts.id.initialize({
       client_id: environment.keyGoogle,
       callback: (response: any) => this.handleLogin(response)
     });
@@ -45,6 +45,10 @@ google.accounts.id.initialize({
         shape: 'rectangular'
       }
     );
+    if (typeof google === 'undefined' || !google.accounts) {
+      setTimeout(() => this.buttonLogin(), 100);
+      return;
+    }
   }
 
 }
