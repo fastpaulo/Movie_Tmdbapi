@@ -11,19 +11,12 @@ import { environment } from '../../../environments/environment';
 export class Login implements OnInit {
   private router = inject(Router);
   ngOnInit(): void {
-    google.accounts.id.initialize({
-      client_id: environment.keyGoogle,
-      callback: (response: any) => this.handleLogin(response)
-    });
-    google.accounts.id.renderButton(
-      document.getElementById('google-signin-button'),
-      {
-        theme: 'filled_black',
-        size: 'large',
-        shape: 'rectangular'
-      }
-    );
+    
   }
+  ngAfterViewInit(): void {
+    this.buttonLogin();
+  }
+
   private decodeToken(token: string) {
     return JSON.parse(atob(token.split('.')[1]));
   }
@@ -38,4 +31,20 @@ export class Login implements OnInit {
       this.router.navigate(['/home']);
     }
   }
+
+  buttonLogin() { 
+google.accounts.id.initialize({
+      client_id: environment.keyGoogle,
+      callback: (response: any) => this.handleLogin(response)
+    });
+    google.accounts.id.renderButton(
+      document.getElementById('google-signin-button'),
+      {
+        theme: 'filled_black',
+        size: 'large',
+        shape: 'rectangular'
+      }
+    );
+  }
+
 }
