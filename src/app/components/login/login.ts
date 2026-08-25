@@ -11,7 +11,6 @@ import { environment } from '../../../environments/environment';
 export class Login implements AfterViewInit {
   private router = inject(Router);
   ngOnInit(): void {
-
   }
   ngAfterViewInit(): void {
     this.buttonLogin();
