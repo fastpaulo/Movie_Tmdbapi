@@ -44,7 +44,7 @@ export class Home {
   listMyMovies() {
     const userSession = sessionStorage.getItem('user')|| '{}';
     console.log('Sessão do usuário:', userSession);
-    if (userSession!== "undefined" ) {
+  
       const user = JSON.parse(userSession);
       const userId = user.email;
       console.log('ID do usuário:', userId);
@@ -54,9 +54,7 @@ export class Home {
           console.log('Filmes favoritos do usuário:', myMovies);
         }
       });
-    }else {
-      console.error('Usuário não encontrado na sessão.');
-    }
+    
   }
   removeFavorite(movieId: number) {
     const userSession = sessionStorage.getItem('user');
