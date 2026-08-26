@@ -136,7 +136,8 @@
     <!-- ========================================== -->
     <!-- SEÇÃO 2: MEUS FILMES FAVORITOS (Firestore) -->
     <!-- ========================================== -->
-    <section>
+     @if (myMovies().length > 0) {
+<section>
       <!-- Cabeçalho Favoritos -->
       <header
         class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-800 pb-4">
@@ -205,5 +206,7 @@
       </div>
     </section>
 
+     }
+    
   </div>
 </div>

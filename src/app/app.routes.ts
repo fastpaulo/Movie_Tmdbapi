@@ -8,9 +8,9 @@ import { MovieTrailer } from './components/movie-trailer/movie-trailer';
 
 
 export const routes: Routes = [
-    { path: '', component: Login },
-    { path: 'home', component: Home ,canActivate: [authGuard] },
-    {path: 'movie-details/:id', component: MovieDetails, canActivate: [authGuard] },
-    {path: 'movie-trailer/:id', component: MovieTrailer, canActivate: [authGuard] },
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'home', component: Home },
+    {path: 'movie-details/:id', component: MovieDetails },
+    {path: 'movie-trailer/:id', component: MovieTrailer},
     
 ];
