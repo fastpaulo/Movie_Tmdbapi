@@ -80,4 +80,10 @@ export class NavBar implements OnInit {
     this.auth.signOut();
     window.location.reload();
   }
+  NavHome(){
+    this.router.navigate(['/home'])
+  }
+  NavFav(){
+    this.router.navigate(['/movie-favorites'])
+  }
 }

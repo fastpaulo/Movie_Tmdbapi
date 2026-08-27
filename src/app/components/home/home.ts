@@ -25,6 +25,7 @@ export class Home {
   private tmdbservice = inject(TmdbMovies);
 
   ngOnInit() {
+
     this.listMyMovies();
     this.userSession();
     this.tmdbservice.getPopularMovies().subscribe(
@@ -42,19 +43,19 @@ export class Home {
     this.router.navigate(['/movie-details', movieId]);
   }
   listMyMovies() {
-    const userSession = sessionStorage.getItem('user')|| '{}';
-    console.log('Sessão do usuário:', userSession);
-  
-      const user = JSON.parse(userSession);
-      const userId = user.email;
-      console.log('ID do usuário:', userId);
-      this.favoritesService.getFavorites(userId).subscribe({
-        next: (myMovies) => {
-          this.myMovies.set(myMovies);
-          console.log('Filmes favoritos do usuário:', myMovies);
-        }
-      });
-    
+    const userSession = sessionStorage.getItem('user') || '{}';
+
+
+    const user = JSON.parse(userSession);
+    const userId = user.email;
+
+    this.favoritesService.getFavorites(userId).subscribe({
+      next: (myMovies) => {
+        this.myMovies.set(myMovies);
+
+      }
+    });
+
   }
   removeFavorite(movieId: number) {
     const userSession = sessionStorage.getItem('user');
@@ -62,7 +63,7 @@ export class Home {
       const user = JSON.parse(userSession);
       const userId = user.email;
       this.favoritesService.removeFavorite(userId, movieId).then(() => {
-        console.log(`Filme com ID ${movieId} removido dos favoritos do usuário ${userId}`);
+
         this.listMyMovies();
       }).catch((error) => {
         console.error('Erro ao remover filme dos favoritos:', error);
@@ -74,12 +75,16 @@ export class Home {
   }
   async toggleFavorite(movie: any, event: MouseEvent): Promise<void> {
     event.stopPropagation(); // Evita acionar o clique de detalhes do card
-
-    if (this.isFavorite(movie.id)) {
-      await this.favoritesService.removeFavorite(this.userId(), movie.id);
-    } else {
-      await this.favoritesService.addFavorite(this.userId(), movie);
+    if (sessionStorage.getItem('user')) {
+      if (this.isFavorite(movie.id)) {
+        await this.favoritesService.removeFavorite(this.userId(), movie.id);
+      } else {
+        await this.favoritesService.addFavorite(this.userId(), movie);
+      }
+    }else{
+      alert('Entrar na conta para Favoritar');
     }
+
   }
 
   userSession() {
@@ -109,5 +114,5 @@ export class Home {
         console.error('Erro ao buscar filmes populares:', error);
       }
     });
-   }
+  }
 }
