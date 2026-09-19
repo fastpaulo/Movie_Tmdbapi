@@ -80,5 +80,5 @@ Acesse `http://localhost:4200/` no seu navegador.
 ## 👨‍💻 Autor
 
 **Paulo Henrique da Silva Pereira**
-* [LinkedIn](https://linkedin.com/in/seu-linkedin)
-* [GitHub](https://github.com/seu-github)
+* [LinkedIn](https://www.linkedin.com/in/paulo-pereira-7a3976176/)
+* [GitHub](https://github.com/fastpaulo)
