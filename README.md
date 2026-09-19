@@ -36,7 +36,7 @@ Antes de iniciar, certifique-se de ter instalado em sua máquina:
 
 **1. Clone o repositório**
 ```bash
-git clone [https://github.com/SEU-USUARIO/nome-do-repositorio.git](https://github.com/SEU-USUARIO/nome-do-repositorio.git)
+git clone [https://github.com/fastpaulo/projeto_apiTeste.git](https://github.com/fastpaulo/projeto_apiTeste.git)
 cd nome-do-repositorio
 ```
 
