@@ -4,12 +4,13 @@ Uma aplicação web moderna e responsiva para exploração de catálogo de filme
 
 ## ✨ Funcionalidades
 
+* **Autenticação Segura (Google SSO):** Login rápido e seguro utilizando a conta Google do usuário (Single Sign-On). O sistema gerencia a sessão ativamente e protege os dados privados.
 * **Catálogo e Busca Inteligente:** Listagem de filmes populares e busca reativa por título, utilizando *debounce time* para otimização das chamadas à API.
 * **Infinite Scroll:** Paginação contínua e fluida integrada diretamente na rolagem da página inicial.
 * **Detalhes e Trailers:** Visualização imersiva dos dados do filme, com reprodução de trailers via modal. Conta com um algoritmo inteligente de fallback de idioma (busca trailers em `pt-BR` e, se indisponível, faz o fallback automático para `en-US`).
 * **Favoritos em Tempo Real:** Sistema de favoritar filmes atrelado à sessão do usuário. Sincronização em tempo real utilizando Firebase Firestore.
-* **Rotas Protegidas:** Controle de acesso via `AuthGuard`. Usuários não autenticados são redirecionados automaticamente ao tentar acessar a área de favoritos.
-* **UX/UI Avançada:** Interface estilizada com Tailwind CSS, incluindo *Skeleton Loaders* para feedback imediato durante o processamento (imitando plataformas de streaming reais).
+* **Rotas Protegidas:** Controle de acesso via `AuthGuard`. Usuários não autenticados são redirecionados automaticamente à tela de login ao tentar acessar áreas privadas.
+* **UX/UI Avançada:** Interface estilizada com Tailwind CSS, incluindo *Skeleton Loaders* para feedback imediato durante o processamento.
 
 ## 🚀 Tecnologias e Arquitetura
 
@@ -22,7 +23,8 @@ O projeto foi construído empregando as mais recentes diretrizes e ferramentas d
   * **Lazy Loading de Rotas** (`loadComponent`) para otimização do *bundle* inicial e performance.
   * **HttpInterceptor (Functional)** para injeção centralizada e segura de Tokens de API.
 * **RxJS:** Tratamento de assincronismo e prevenção de *callback hell* utilizando operadores avançados (`switchMap`, `debounceTime`, `distinctUntilChanged`, `forkJoin`).
-* **Firebase (AngularFire):** Banco de dados NoSQL estruturado em documentos com persistência reativa (Data Streams).
+* **SSO Google:** Gerenciamento de identidade e fluxos de login OAuth (Google SSO).
+* **Firebase Firestore:** Banco de dados NoSQL estruturado em documentos com persistência reativa.
 * **Tailwind CSS:** Estilização utilitária para design responsivo e efeitos visuais (Backdrop blur, gradientes, pulse animations).
 * **ngx-bootstrap:** Gerenciamento seguro de Modais (Player de Vídeo).
 
@@ -37,19 +39,25 @@ Antes de iniciar, certifique-se de ter instalado em sua máquina:
 **1. Clone o repositório**
 ```bash
 git clone [https://github.com/fastpaulo/projeto_apiTeste.git](https://github.com/fastpaulo/projeto_apiTeste.git)
+```
+
+**2. Entre na pasta do projeto**
+```bash
 cd nome-do-repositorio
 ```
 
-**2. Instale as dependências**
+**3. Instale as dependências**
 ```bash
-
 npm install
 ```
-**3. Configure as Variáveis de Ambiente**
-```bash
-Crie o arquivo (src/environments/environment.ts) e adicione suas chaves de API do TMDB e as credenciais do seu projeto Firebase:
+
+**4. Configure as Variáveis de Ambiente**
+Abra o arquivo `src/environments/environment.ts` e adicione suas chaves:
+
+```typescript
 export const environment = {
   production: false,
+  keyGoogle:'SUA_API_KEY_GOOGLE__SSO',
   tmdbBaseUrl: '[https://api.themoviedb.org/3](https://api.themoviedb.org/3)',
   tokenApi: 'SEU_BEARER_TOKEN_DO_TMDB_AQUI',
   firebaseConfig: {
@@ -60,13 +68,17 @@ export const environment = {
     messagingSenderId: "SEU_SENDER_ID",
     appId: "SEU_APP_ID"
   }
+};
 ```
-**4. Execute o servidor de desenvolvimento**
 
-```Bash
+**5. Execute o servidor de desenvolvimento**
+```bash
 ng serve
-
-Acesse http://localhost:4200/ no seu navegador. O aplicativo será recarregado automaticamente se você alterar qualquer um dos arquivos fonte.
 ```
-👨‍💻 Autor
-Paulo Henrique da Silva Pereira
+Acesse `http://localhost:4200/` no seu navegador.
+
+## 👨‍💻 Autor
+
+**Paulo Henrique da Silva Pereira**
+* [LinkedIn](https://linkedin.com/in/seu-linkedin)
+* [GitHub](https://github.com/seu-github)
