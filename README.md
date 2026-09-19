@@ -38,14 +38,16 @@ Antes de iniciar, certifique-se de ter instalado em sua máquina:
 ```bash
 git clone [https://github.com/SEU-USUARIO/nome-do-repositorio.git](https://github.com/SEU-USUARIO/nome-do-repositorio.git)
 cd nome-do-repositorio
+```
+
 **2. Instale as dependências**
+```bash
 
-Bash
 npm install
-3. Configure as Variáveis de Ambiente
+```
+**3. Configure as Variáveis de Ambiente**
+```bash
 Abra o arquivo src/environments/environment.ts (ou crie-o) e adicione suas chaves de API do TMDB e as credenciais do seu projeto Firebase:
-
-TypeScript
 export const environment = {
   production: false,
   tmdbBaseUrl: '[https://api.themoviedb.org/3](https://api.themoviedb.org/3)',
@@ -58,13 +60,14 @@ export const environment = {
     messagingSenderId: "SEU_SENDER_ID",
     appId: "SEU_APP_ID"
   }
+```
+**4. Execute o servidor de desenvolvimento**
 
-4. Execute o servidor de desenvolvimento
-
-Bash
+```Bash
 ng serve
-Acesse http://localhost:4200/ no seu navegador. O aplicativo será recarregado automaticamente se você alterar qualquer um dos arquivos fonte.
 
+Acesse http://localhost:4200/ no seu navegador. O aplicativo será recarregado automaticamente se você alterar qualquer um dos arquivos fonte.
+```
 👨‍💻 Autor
 Paulo Henrique da Silva Pereira
 
