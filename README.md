@@ -37,10 +37,13 @@ Antes de iniciar, certifique-se de ter instalado em sua máquina:
 1. Clone o repositório**
 ```bash
 git clone [https://github.com/fastpaulo/sistema_impressora.git](https://github.com/fastpaulo/sistema_impressora.git)
+```bash
 cd nome-do-repositorio
 2. Instale as dependências
+```bash
 npm install
 3. Configure as Variáveis de Ambiente
+```bash
 Crie o arquivo src/environments/environment.ts (ng generate environments)e adicione suas chaves de API do TMDB e as credenciais do seu projeto Firebase:
 
 export const environment = {
