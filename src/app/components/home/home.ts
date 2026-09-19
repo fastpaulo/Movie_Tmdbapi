@@ -1,118 +1,167 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { TmdbMovies } from '../../services/tmdb-movies';
 import { DecimalPipe, DatePipe } from '@angular/common';
 import { NavBar } from '../nav-bar/nav-bar';
 import { Favorite } from '../../services/favorite';
-import { Search } from '../../services/search';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { InfiniteScrollDirective } from '../../directives/infinite-scroll.directive';
+
 @Component({
-  imports: [DecimalPipe, DatePipe, NavBar],
   selector: 'app-home',
+  standalone: true,
+  imports: [
+    DecimalPipe, 
+    DatePipe, 
+    NavBar, 
+    ReactiveFormsModule, 
+    InfiniteScrollDirective
+  ],
   styleUrl: './home.css',
   templateUrl: './home.html',
 })
-export class Home {
+export class Home implements OnInit {
   private router = inject(Router);
+  private favoritesService = inject(Favorite);
+  private tmdbservice = inject(TmdbMovies);
+
   movies = signal<any[]>([]);
   myMovies = signal<any[]>([]);
-  private favoritesService = inject(Favorite);
   userId = signal<string>('');
+  
+  // 🔥 NOVO: Computed signal para performance! Ele cria uma lista rápida de IDs favoritos.
+  favoriteMovieIds = computed(() => {
+    return new Set(this.myMovies().map(fav => String(fav.id)));
+  });
 
   imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
-  private searchMovies = inject(Search);
-  private tmdbservice = inject(TmdbMovies);
+  isLoading = signal<boolean>(false);
+  isLoadingMore = signal<boolean>(false);
+  currentPage = 1;
+  totalPages = 1;
+  currentQuery = '';
+
+  searchControl = new FormControl('');
 
   ngOnInit() {
-
-    this.listMyMovies();
     this.userSession();
-    this.tmdbservice.getPopularMovies().subscribe(
-      (response) => {
+    this.listMyMovies();
+    this.loadMovies(1, true);
 
-        this.movies.set(response.results);
+    // Agora isso vai funcionar porque vamos vincular no HTML
+    this.searchControl.valueChanges.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe((query) => {
+      this.currentQuery = query ? query.trim() : '';
+      this.currentPage = 1;
+      this.loadMovies(1, true);
+    });
+  }
 
+  loadMovies(page: number, replace: boolean = false) {
+    if (replace) {
+      this.isLoading.set(true);
+    } else {
+      this.isLoadingMore.set(true);
+    }
+
+    const request$ = this.currentQuery
+      ? this.tmdbservice.searchMovies(this.currentQuery, page)
+      : this.tmdbservice.getPopularMovies(page);
+
+    request$.subscribe({
+      next: (response: any) => {
+        this.totalPages = response.total_pages || 1;
+        this.currentPage = page;
+
+        if (replace) {
+          this.movies.set(response.results || []);
+        } else {
+          this.movies.update((current) => {
+            const existingIds = new Set(current.map((m) => m.id));
+            const newUnique = (response.results || []).filter((m: any) => !existingIds.has(m.id));
+            return [...current, ...newUnique];
+          });
+        }
+
+        this.isLoading.set(false);
+        this.isLoadingMore.set(false);
       },
-      (error) => {
-        console.error('Erro ao buscar filmes populares:', error);
-      }
-    );
-  }
-  MovieDetails(movieId: number) {
-    this.router.navigate(['/movie-details', movieId]);
-  }
-  listMyMovies() {
-    const userSession = sessionStorage.getItem('user') || '{}';
-
-
-    const user = JSON.parse(userSession);
-    const userId = user.email;
-
-    this.favoritesService.getFavorites(userId).subscribe({
-      next: (myMovies) => {
-        this.myMovies.set(myMovies);
-
+      error: (err) => {
+        console.error('Erro ao carregar filmes:', err);
+        this.isLoading.set(false);
+        this.isLoadingMore.set(false);
       }
     });
-
   }
-  removeFavorite(movieId: number) {
-    const userSession = sessionStorage.getItem('user');
-    if (userSession) {
-      const user = JSON.parse(userSession);
-      const userId = user.email;
-      this.favoritesService.removeFavorite(userId, movieId).then(() => {
 
-        this.listMyMovies();
-      }).catch((error) => {
-        console.error('Erro ao remover filme dos favoritos:', error);
+  loadNextPage() {
+    if (this.isLoading() || this.isLoadingMore()) return;
+    if (this.currentPage >= this.totalPages) return;
+    this.loadMovies(this.currentPage + 1, false);
+  }
+
+  // Renomeado para padrão camelCase
+  movieDetails(movieId: number) {
+    this.router.navigate(['/movie-details', movieId]);
+  }
+
+  listMyMovies() {
+    const userId = this.userId();
+    if (userId) {
+      this.favoritesService.getFavorites(userId).subscribe({
+        next: (myMovies) => this.myMovies.set(myMovies)
       });
     }
   }
-  isFavorite(movieId: string | number): boolean {
-    return this.myMovies().some((fav) => String(fav.id) === String(movieId));
-  }
-  async toggleFavorite(movie: any, event: MouseEvent): Promise<void> {
-    event.stopPropagation(); // Evita acionar o clique de detalhes do card
-    if (sessionStorage.getItem('user')) {
-      if (this.isFavorite(movie.id)) {
-        await this.favoritesService.removeFavorite(this.userId(), movie.id);
-      } else {
-        await this.favoritesService.addFavorite(this.userId(), movie);
-      }
-    }else{
-      alert('Entrar na conta para Favoritar');
-    }
 
+  async removeFavorite(movieId: number) {
+    const userId = this.userId();
+    if (userId) {
+      try {
+        await this.favoritesService.removeFavorite(userId, movieId);
+        this.listMyMovies();
+      } catch (error) {
+        console.error('Erro ao remover filme dos favoritos:', error);
+      }
+    }
+  }
+
+  async toggleFavorite(movie: any, event: MouseEvent): Promise<void> {
+    event.stopPropagation(); // Impede o clique de abrir os detalhes do filme
+    const userId = this.userId();
+    
+    if (userId) {
+      // Usamos o Set criado no Computed para verificação ultra-rápida
+      if (this.favoriteMovieIds().has(String(movie.id))) {
+        await this.favoritesService.removeFavorite(userId, movie.id);
+      } else {
+        await this.favoritesService.addFavorite(userId, movie);
+      }
+      
+    } else {
+      alert('Entre na sua conta para favoritar');
+    }
   }
 
   userSession() {
     const userSession = sessionStorage.getItem('user');
     if (userSession) {
-      const user = JSON.parse(userSession);
-      const userId = user.email;
-      this.userId.set(userId);
+      try {
+        const user = JSON.parse(userSession);
+        if (user && user.email) {
+          this.userId.set(user.email);
+        }
+      } catch (e) {
+        console.error('Sessão inválida', e);
+      }
     }
   }
-  searchMovie(query: string) {
-    this.searchMovies.searchMovies(query).subscribe({
-      next: (response) => {
-        this.movies.set(response.results);
-      },
-      error: (error) => {
-        console.error('Erro ao buscar filmes:', error);
-      }
-    });
-  }
-  clearSearch() {
-    this.tmdbservice.getPopularMovies().subscribe({
-      next: (response) => {
-        this.movies.set(response.results);
-      },
-      error: (error) => {
-        console.error('Erro ao buscar filmes populares:', error);
-      }
-    });
-  }
+  
+  // 🔥 Funções searchMovie() e clearSearch() foram DELETADAS. 
+  // O RxJS no ngOnInit cuida de tudo automaticamente agora!
 }

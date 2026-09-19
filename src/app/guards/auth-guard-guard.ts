@@ -1,8 +1,14 @@
-import { inject } from '@angular/core/primitives/di';
-import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
+import { inject } from '@angular/core'; // 🔥 Importação corrigida
+import { CanActivateFn, Router } from '@angular/router';
 
-export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-  const router :Router = inject(Router);
-  const protectedRoutes = ['/home'];
-  return protectedRoutes.includes(state.url) && !sessionStorage.getItem('user') ? router.parseUrl('/') : true;
+export const authGuard: CanActivateFn = () => {
+  const router = inject(Router);
+  
+  // Se existe um usuário no sessionStorage, permite a passagem
+  if (sessionStorage.getItem('user')) {
+    return true;
+  }
+  
+  // Se não existe, redireciona para a tela de login (raiz '/')
+ return router.parseUrl('/login');
 };

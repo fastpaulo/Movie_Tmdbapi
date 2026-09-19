@@ -6,8 +6,9 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { tmdbInterceptor } from './guards/tmdb.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -15,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([tmdbInterceptor])),
     BsModalService
   ]
 };
