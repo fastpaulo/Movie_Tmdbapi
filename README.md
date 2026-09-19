@@ -34,18 +34,18 @@ Antes de iniciar, certifique-se de ter instalado em sua máquina:
 
 ## 🔧 Configuração e Instalação
 
-1. Clone o repositório**
+**1. Clone o repositório**
 ```bash
-git clone [https://github.com/fastpaulo/sistema_impressora.git](https://github.com/fastpaulo/sistema_impressora.git)
-```bash
+git clone [https://github.com/SEU-USUARIO/nome-do-repositorio.git](https://github.com/SEU-USUARIO/nome-do-repositorio.git)
 cd nome-do-repositorio
-2. Instale as dependências
-```bash
+**2. Instale as dependências**
+
+Bash
 npm install
 3. Configure as Variáveis de Ambiente
-```bash
-Crie o arquivo src/environments/environment.ts (ng generate environments)e adicione suas chaves de API do TMDB e as credenciais do seu projeto Firebase:
+Abra o arquivo src/environments/environment.ts (ou crie-o) e adicione suas chaves de API do TMDB e as credenciais do seu projeto Firebase:
 
+TypeScript
 export const environment = {
   production: false,
   tmdbBaseUrl: '[https://api.themoviedb.org/3](https://api.themoviedb.org/3)',
@@ -59,11 +59,11 @@ export const environment = {
     appId: "SEU_APP_ID"
   }
 
-  4. Execute o servidor de desenvolvimento
+4. Execute o servidor de desenvolvimento
 
-  ng serve
-
-  Acesse http://localhost:4200/ no seu navegador. O aplicativo será recarregado automaticamente se você alterar qualquer um dos arquivos fonte.
+Bash
+ng serve
+Acesse http://localhost:4200/ no seu navegador. O aplicativo será recarregado automaticamente se você alterar qualquer um dos arquivos fonte.
 
 👨‍💻 Autor
 Paulo Henrique da Silva Pereira
@@ -71,5 +71,3 @@ Paulo Henrique da Silva Pereira
 LinkedIn
 
 GitHub
-
-
