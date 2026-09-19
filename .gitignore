@@ -45,3 +45,5 @@ Thumbs.db
 
 # Environment
 /environments
+.evironments.ts
+.evironments.development.ts
