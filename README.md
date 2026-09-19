@@ -1,59 +1,72 @@
-# ProjetoApiTeste
+# 🎬 Angular Movie App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.3.
+Uma aplicação web moderna e responsiva para exploração de catálogo de filmes, construída com Angular. O sistema consome a API do TMDB (The Movie Database) e utiliza o Firebase Firestore para gerenciar o catálogo pessoal de favoritos do usuário em tempo real.
 
-## Development server
+## ✨ Funcionalidades
 
-To start a local development server, run:
+* **Catálogo e Busca Inteligente:** Listagem de filmes populares e busca reativa por título, utilizando *debounce time* para otimização das chamadas à API.
+* **Infinite Scroll:** Paginação contínua e fluida integrada diretamente na rolagem da página inicial.
+* **Detalhes e Trailers:** Visualização imersiva dos dados do filme, com reprodução de trailers via modal. Conta com um algoritmo inteligente de fallback de idioma (busca trailers em `pt-BR` e, se indisponível, faz o fallback automático para `en-US`).
+* **Favoritos em Tempo Real:** Sistema de favoritar filmes atrelado à sessão do usuário. Sincronização em tempo real utilizando Firebase Firestore.
+* **Rotas Protegidas:** Controle de acesso via `AuthGuard`. Usuários não autenticados são redirecionados automaticamente ao tentar acessar a área de favoritos.
+* **UX/UI Avançada:** Interface estilizada com Tailwind CSS, incluindo *Skeleton Loaders* para feedback imediato durante o processamento (imitando plataformas de streaming reais).
 
+## 🚀 Tecnologias e Arquitetura
+
+O projeto foi construído empregando as mais recentes diretrizes e ferramentas do ecossistema Angular:
+
+* **Angular (v17+)**: 
+  * Reatividade moderna baseada em **Signals**.
+  * Arquitetura 100% **Standalone Components** (sem ngModules).
+  * Nova sintaxe de **Control Flow** (`@if`, `@for`, `@empty`).
+  * **Lazy Loading de Rotas** (`loadComponent`) para otimização do *bundle* inicial e performance.
+  * **HttpInterceptor (Functional)** para injeção centralizada e segura de Tokens de API.
+* **RxJS:** Tratamento de assincronismo e prevenção de *callback hell* utilizando operadores avançados (`switchMap`, `debounceTime`, `distinctUntilChanged`, `forkJoin`).
+* **Firebase (AngularFire):** Banco de dados NoSQL estruturado em documentos com persistência reativa (Data Streams).
+* **Tailwind CSS:** Estilização utilitária para design responsivo e efeitos visuais (Backdrop blur, gradientes, pulse animations).
+* **ngx-bootstrap:** Gerenciamento seguro de Modais (Player de Vídeo).
+
+## 📋 Pré-requisitos
+
+Antes de iniciar, certifique-se de ter instalado em sua máquina:
+* [Node.js](https://nodejs.org/en/) (versão 18.x ou superior)
+* [Angular CLI](https://angular.io/cli)
+
+## 🔧 Configuração e Instalação
+
+1. Clone o repositório**
 ```bash
-ng serve
-```
+git clone [https://github.com/fastpaulo/sistema_impressora.git](https://github.com/fastpaulo/sistema_impressora.git)
+cd nome-do-repositorio
+2. Instale as dependências
+npm install
+3. Configure as Variáveis de Ambiente
+Crie o arquivo src/environments/environment.ts (ng generate environments)e adicione suas chaves de API do TMDB e as credenciais do seu projeto Firebase:
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+export const environment = {
+  production: false,
+  tmdbBaseUrl: '[https://api.themoviedb.org/3](https://api.themoviedb.org/3)',
+  tokenApi: 'SEU_BEARER_TOKEN_DO_TMDB_AQUI',
+  firebaseConfig: {
+    apiKey: "SUA_API_KEY_FIREBASE",
+    authDomain: "SEU_DOMINIO.firebaseapp.com",
+    projectId: "SEU_PROJECT_ID",
+    storageBucket: "SEU_BUCKET.appspot.com",
+    messagingSenderId: "SEU_SENDER_ID",
+    appId: "SEU_APP_ID"
+  }
 
-## Code scaffolding
+  4. Execute o servidor de desenvolvimento
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+  ng serve
 
-```bash
-ng generate component component-name
-```
+  Acesse http://localhost:4200/ no seu navegador. O aplicativo será recarregado automaticamente se você alterar qualquer um dos arquivos fonte.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+👨‍💻 Autor
+Paulo Henrique da Silva Pereira
 
-```bash
-ng generate --help
-```
+LinkedIn
 
-## Building
+GitHub
 
-To build the project run:
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

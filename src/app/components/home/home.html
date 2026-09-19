@@ -144,52 +144,55 @@
     </header>
 
     <!-- Grid Favoritos -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-      @for (fav of myMovies(); track fav.id) {
-      <article
-        class="group relative flex flex-col bg-slate-900 rounded-xl overflow-hidden border border-slate-800/80 shadow-md hover:shadow-2xl hover:shadow-rose-950/20 hover:border-slate-700 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer">
+    <!-- Grid de Filmes -->
+@if (isLoading()) {
+  <!-- ========================================== -->
+  <!-- ESTADO DE CARREGAMENTO (SKELETON LOADERS)  -->
+  <!-- ========================================== -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+    <!-- Criamos um loop rápido com 12 itens vazios usando uma array inline -->
+    @for (skeleton of [1,2,3,4,5,6,7,8,9,10,11,12]; track $index) {
+      <article class="flex flex-col bg-slate-900 rounded-xl overflow-hidden border border-slate-800/80 shadow-md animate-pulse">
+        
+        <!-- Pôster Fake -->
+        <div class="aspect-[2/3] w-full bg-slate-800"></div>
 
-        <!-- Pôster -->
-        <div (click)="movieDetails(fav.id)" class="relative aspect-[2/3] w-full overflow-hidden bg-slate-800">
-          <img [src]="imageBaseUrl + fav.poster_path" [alt]="fav.title"
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-
-          <!-- Badge de Nota -->
-          <div
-            class="absolute top-2 right-2 flex items-center gap-1 bg-slate-950/80 backdrop-blur-md px-2 py-0.5 rounded-md border border-slate-700/50">
-            <span class="text-amber-400 text-xs">★</span>
-            <span class="text-xs font-bold text-amber-300">
-              {{ fav.vote_average | number:'1.1-1' }}
-            </span>
+        <!-- Textos Fakes -->
+        <div class="p-3.5 flex flex-col gap-3 mt-auto">
+          <!-- Título Fake -->
+          <div>
+            <div class="h-4 bg-slate-700 rounded w-3/4 mb-2"></div>
+            <div class="h-3 bg-slate-800 rounded w-1/4"></div>
           </div>
-
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60">
+          <!-- Sinopse Fake -->
+          <div class="space-y-1.5 mt-2">
+            <div class="h-2.5 bg-slate-800 rounded w-full"></div>
+            <div class="h-2.5 bg-slate-800 rounded w-5/6"></div>
           </div>
-        </div>
-
-        <!-- Informações -->
-        <div class="p-3.5 flex flex-col flex-grow justify-between gap-2">
-          <h3
-            class="font-semibold text-slate-100 text-sm md:text-base leading-snug line-clamp-1 group-hover:text-rose-400 transition-colors"
-            [title]="fav.title">
-            {{ fav.title }}
-          </h3>
-
-          <!-- Botão de Remover -->
-          <button (click)="removeFavorite(fav.id); $event.stopPropagation()"
-            class="mt-1 w-full text-center text-xs py-1.5 px-2 rounded bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 transition-colors">
-            Remover
-          </button>
         </div>
 
       </article>
-      } @empty {
-      <div
-        class="col-span-full py-12 text-center text-slate-500 bg-slate-900/40 rounded-xl border border-dashed border-slate-800">
-        <p class="text-sm md:text-base">Você ainda não favoritou nenhum filme.</p>
+    }
+  </div>
+} @else {
+  <!-- ========================================== -->
+  <!-- ESTADO PRONTO (SEUS CARDS REAIS DE FILME)  -->
+  <!-- ========================================== -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+    @for (movie of movies(); track movie.id) {
+      <article class="group relative flex flex-col bg-slate-900 rounded-xl overflow-hidden border border-slate-800/80 shadow-md hover:shadow-2xl hover:shadow-rose-950/20 hover:border-slate-700 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer">
+        
+        <!-- TODO O SEU CÓDIGO DO CARD DO FILME CONTINUA AQUI... -->
+        <!-- (Pôster, Botão de Favorito, Título, Sinopse, etc) -->
+        
+      </article>
+    } @empty {
+      <div class="col-span-full py-12 text-center text-slate-500">
+        <p class="text-sm md:text-base">Nenhum filme encontrado para esta busca.</p>
       </div>
-      }
-    </div>
+    }
+  </div>
+}
   </section>
 
   }
