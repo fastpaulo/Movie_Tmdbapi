@@ -47,7 +47,7 @@ npm install
 ```
 **3. Configure as Variáveis de Ambiente**
 ```bash
-Abra o arquivo src/environments/environment.ts (ou crie-o) e adicione suas chaves de API do TMDB e as credenciais do seu projeto Firebase:
+Crie o arquivo (src/environments/environment.ts) e adicione suas chaves de API do TMDB e as credenciais do seu projeto Firebase:
 export const environment = {
   production: false,
   tmdbBaseUrl: '[https://api.themoviedb.org/3](https://api.themoviedb.org/3)',
@@ -70,7 +70,3 @@ Acesse http://localhost:4200/ no seu navegador. O aplicativo será recarregado a
 ```
 👨‍💻 Autor
 Paulo Henrique da Silva Pereira
-
-LinkedIn
-
-GitHub
