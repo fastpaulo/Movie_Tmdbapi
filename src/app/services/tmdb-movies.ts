@@ -27,6 +27,7 @@ export interface FirebaseMovie {
 export class TmdbMovies {
     private firestore = inject(Firestore);
     private http = inject(HttpClient);
+    url = environment.tmdbBaseUrl;
     private headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${environment.tokenApi}`
@@ -42,14 +43,16 @@ export class TmdbMovies {
 
         return this.http.get<TmdbSearchResponse>(url, { headers: this.headers, params });
     }
-    getPopularMovies(page: number = 1): Observable<TmdbSearchResponse> {
-        const url = `${environment.tmdbBaseUrl}/movie/popular`;
+    // tmdb.service.ts
+    getPopularMovies(page = 1): Observable<TmdbSearchResponse> {
         const params = new HttpParams()
             .set('language', 'pt-BR')
-            // .set('api_key', environment.KeyapiTmdb)
             .set('page', page.toString());
-        console.log('URL da requisição:', url);
-        return this.http.get<TmdbSearchResponse>(url, { headers: this.headers, params });
+
+        return this.http.get<TmdbSearchResponse>(this.url + '/movie/popular', {
+            headers: this.headers,
+            params
+        });
     }
     getMovieDetails(movieId: number): Observable<any> {
         const url = `${environment.tmdbBaseUrl}/movie/${movieId}`;
@@ -59,7 +62,7 @@ export class TmdbMovies {
         return this.http.get<any>(url, { headers: this.headers, params });
     }
     saveMovie() {
-        
+
     }
     getBackdropUrl(
         path: string | null | undefined,
@@ -73,7 +76,7 @@ export class TmdbMovies {
         return `${this.imageBaseUrl}/${size}${path}`;
     }
 
-    getWatchTrailerUrl(movieId: number, language: string = 'pt-BR'):  Observable<VideoResponse> {
+    getWatchTrailerUrl(movieId: number, language: string = 'pt-BR'): Observable<VideoResponse> {
         const url = `${environment.tmdbBaseUrl}/movie/${movieId}/videos`;
         const params = new HttpParams()
             .set('language', language);
